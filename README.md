@@ -11,7 +11,7 @@ coherent image.
 stereo disocclusion holes. The model uses a combination of:
 - the warped image with missing regions,
 - the hole mask,
-- **depth outside the holes** (the (warped) orginnal depth),
+- **depth** (the (warped) orginnal depth),
 - **normals inside the holes** (derived from the (warped) orginal depth. )
 
 …to reconstruct a plausible infilled target image.
@@ -28,7 +28,7 @@ automatic depth estimation and mesh-based view synthesis.
   the missing texture should continue from.
 
 - **Depth for global structure**  
-  Outside holes, the warped depth anchors the scene’s global geometry and helps the network keep
+  The warped depth anchors the scene’s global geometry and helps the network keep
   textures and structures consistent.
 
 - **Lightweight architecture**  
@@ -43,14 +43,14 @@ Each training and inference sample uses an 8-channel input tensor:
 
 | Channels | Description |
 |---------|-------------|
-| 3       | Warped RGB image (`warped_image`) with holes (typically black or masked out) |
+| 3       | Warped RGB image (`warped_image`) with holes filled with bad data |
 | 1       | Hole mask (`hole_mask`) (1 = hole, 0 = valid pixel) |
 | 3       | Normals **inside holes only** (`normals_masked`), zeroed elsewhere |
-| 1       | Depth **outside holes only** (`depth_masked`), zeroed inside holes |
+| 1       | Depth (`depth_masked`), zeroed inside holes |
 
 The representation outover warped_image and hole_mask gives the network:
 - *local geometric cues* (normals inside the hole), and  
-- *global geometric context* (depth outside the hole).
+- *global geometric context* (depth).
 
 ## Output
 The network predicts:
@@ -87,12 +87,11 @@ Training data is generated automatically from any collection of images:
    - `hole_mask` (generated from the taged faces in `image_generated_left`)
    - `depth_generated_left`  
    - `normals_generated_left` (generated from `depth_generated_left`)
-   - `normals_left_masked` (normals masked with `hole_mask`)  
-   - `depth_left_masked` (original depth (`org_left_depth`) masked with `hole_mask`)
+   - `normals_left_masked` (normals masked with `hole_mask`)
 
 7. **Use original left image as ground truth** 
    `org_left_image` is the supervised target (for RGB infill), or `org_left_depth` if training depth infill.
-   those two are bound to the generated `hole_mask`, `normals_left_masked` and `depth_left_masked`.
+   those two are bound to the generated `hole_mask`, `normals_left_masked` and `depth_generated_left`.
 
 The pipeline creates unlimited, highly realistic training samples tuned specifically for stereo warping and disocclusion artifacts.  
 Left/right can be swapped with 50% probability for better generalization.
