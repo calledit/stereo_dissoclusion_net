@@ -219,12 +219,12 @@ def convert_to_training_data(img_path, from_zip=False, zip_ref=None):
     
     
     
-    ids_with_paralax = id_paralax_map[paralax_mask2] 
-    hole_mask1 = np.isin(first_morph_ids, ids_with_paralax)
+    ids_with_paralax = id_paralax_map[paralax_mask2]
+    #hole_mask1 = np.isin(first_morph_ids, ids_with_paralax)
     
         
     
-    # Generate a new projection matric to render the morphed mesh from the original camera position 
+    # Generate a new projection matric to render the morphed mesh from the original camera position where the pixels that we callculated to probably have paralaxy will be more visible
     if not do_right:
         eye    = np.array([ipd_baseline, 0, 0], dtype=np.float32)
     else:
