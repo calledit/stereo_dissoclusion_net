@@ -103,7 +103,9 @@ Left/right can be swapped with 50% probability for better generalization.
 - Optionally extend to depth completion using the same architecture.
 
 ## Status
-Early development.
+Development stoped. Results where not good enogh.
+Efforts moved on to https://github.com/calledit/StereoProPainter 
+Then on to https://github.com/calledit/one_shot_stereo
 
 
 ---
@@ -124,6 +126,5 @@ python generate_traning_data_from_dataset.py
 
 ## TODO
 - [x] Traning data generation scripts  
-- [ ] Write network 
-- [ ] Upload pretrained weights  
-- [ ] Visual examples of disocclusion infill  
+- [x] Write network 
+- [x] Upload pretrained weights  
